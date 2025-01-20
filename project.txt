@@ -1,0 +1,105 @@
+#define STEPPER_PIN_1 33
+#define STEPPER_PIN_2 25
+#define STEPPER_PIN_3 26
+#define STEPPER_PIN_4 27
+
+int i = 0;
+int step_number = 0;
+
+void setup() {
+  pinMode(STEPPER_PIN_1, OUTPUT);
+  pinMode(STEPPER_PIN_2, OUTPUT);
+  pinMode(STEPPER_PIN_3, OUTPUT);
+  pinMode(STEPPER_PIN_4, OUTPUT);
+
+  // เริ่มต้นการสื่อสาร Serial
+  Serial.begin(9600);
+  Serial.println("Enter a value for 'i': ");
+}
+
+void loop() {
+  // ตรวจสอบค่าที่ป้อนเข้ามาทาง Serial
+  if (Serial.available() > 0) {
+    String input = Serial.readStringUntil('\n'); // อ่านค่าจนกว่าจะพบ '\n'
+    i = input.toInt(); // แปลงค่าที่ได้รับเป็นจำนวนเต็ม
+    Serial.print("New value for Sec: ");
+    Serial.println("Enter a value for 'i': ");
+    Serial.println(i);
+    i=i*1000;
+  }
+
+  // หมุนมอเตอร์ตามเข็ม
+  if (i > 0) {
+    OneStep(false);
+    delay(2);
+    i--;
+  }
+  // หมุนมอเตอร์ทวนเข็ม
+  if (i < 0) {
+    OneStep(true);
+    delay(2);
+    i++;
+  }
+}
+
+void OneStep(bool dir) {
+  if (dir) {
+    switch (step_number) {
+      case 0:
+        digitalWrite(STEPPER_PIN_1, HIGH);
+        digitalWrite(STEPPER_PIN_2, LOW);
+        digitalWrite(STEPPER_PIN_3, LOW);
+        digitalWrite(STEPPER_PIN_4, LOW);
+        break;
+      case 1:
+        digitalWrite(STEPPER_PIN_1, LOW);
+        digitalWrite(STEPPER_PIN_2, HIGH);
+        digitalWrite(STEPPER_PIN_3, LOW);
+        digitalWrite(STEPPER_PIN_4, LOW);
+        break;
+      case 2:
+        digitalWrite(STEPPER_PIN_1, LOW);
+        digitalWrite(STEPPER_PIN_2, LOW);
+        digitalWrite(STEPPER_PIN_3, HIGH);
+        digitalWrite(STEPPER_PIN_4, LOW);
+        break;
+      case 3:
+        digitalWrite(STEPPER_PIN_1, LOW);
+        digitalWrite(STEPPER_PIN_2, LOW);
+        digitalWrite(STEPPER_PIN_3, LOW);
+        digitalWrite(STEPPER_PIN_4, HIGH);
+        break;
+    }
+  } else {
+    switch (step_number) {
+      case 0:
+        digitalWrite(STEPPER_PIN_1, LOW);
+        digitalWrite(STEPPER_PIN_2, LOW);
+        digitalWrite(STEPPER_PIN_3, LOW);
+        digitalWrite(STEPPER_PIN_4, HIGH);
+        break;
+      case 1:
+        digitalWrite(STEPPER_PIN_1, LOW);
+        digitalWrite(STEPPER_PIN_2, LOW);
+        digitalWrite(STEPPER_PIN_3, HIGH);
+        digitalWrite(STEPPER_PIN_4, LOW);
+        break;
+      case 2:
+        digitalWrite(STEPPER_PIN_1, LOW);
+        digitalWrite(STEPPER_PIN_2, HIGH);
+        digitalWrite(STEPPER_PIN_3, LOW);
+        digitalWrite(STEPPER_PIN_4, LOW);
+        break;
+      case 3:
+        digitalWrite(STEPPER_PIN_1, HIGH);
+        digitalWrite(STEPPER_PIN_2, LOW);
+        digitalWrite(STEPPER_PIN_3, LOW);
+        digitalWrite(STEPPER_PIN_4, LOW);
+        break;
+    }
+  }
+  step_number++;
+  if (step_number > 3) {
+    step_number = 0;
+  }
+}
