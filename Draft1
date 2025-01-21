@@ -1,0 +1,45 @@
+#define MOTOR  26
+#define LED1  2
+#define LED2  16
+#define BUTTON  32
+
+int count = 0;
+
+
+void setup()
+{
+  pinMode(MOTOR, OUTPUT);
+  pinMode(LED1, OUTPUT);
+  pinMode(LED2, OUTPUT);
+  pinMode(BUTTON, INPUT);
+
+}
+
+void loop()
+{
+  if (digitalRead(BUTTON)==LOW){
+    count++;
+    delay(250);
+  }
+  if (count ==  0){
+  digitalWrite(MOTOR, LOW);
+  digitalWrite(LED1, LOW);
+  digitalWrite(LED2, LOW);
+  delay(250);   
+  
+  } else if (count == 1){
+  digitalWrite(MOTOR, LOW);
+  digitalWrite(LED1, HIGH);
+  digitalWrite(LED2, LOW);
+  delay(250);
+  } else if (count == 2){
+  digitalWrite(MOTOR, HIGH);
+  digitalWrite(LED1, HIGH);
+  digitalWrite(LED2, HIGH);
+  delay(250);
+  } else if (count > 2){
+    count = 0;
+  }
+
+
+}
