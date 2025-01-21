@@ -1,0 +1,56 @@
+#include <LCD_I2C.h>
+
+LCD_I2C lcd(0x27, 16, 2);
+
+#define MOTOR  26
+#define LED1  2
+#define LED2  16
+#define BUTTON  32
+
+int count = 0;
+
+
+void setup()
+{
+  pinMode(MOTOR, OUTPUT);
+  pinMode(LED1, OUTPUT);
+  pinMode(LED2, OUTPUT);
+  pinMode(BUTTON, INPUT);
+  lcd.begin();
+  lcd.backlight();
+}
+
+void loop()
+{
+  if (digitalRead(BUTTON)==LOW){
+    count++;
+    delay(250);
+  }
+  if (count ==  0){
+  lcd.clear();
+  digitalWrite(MOTOR, LOW);
+  digitalWrite(LED1, LOW);
+  digitalWrite(LED2, LOW);
+  lcd.print(count);
+  delay(250);   
+  
+  } else if (count == 1){
+  lcd.clear();
+  digitalWrite(MOTOR, LOW);
+  digitalWrite(LED1, HIGH);
+  digitalWrite(LED2, LOW);
+  lcd.print(count);
+  delay(250);
+  } else if (count == 2){
+  lcd.clear();
+  digitalWrite(MOTOR, HIGH);
+  digitalWrite(LED1, HIGH);
+  digitalWrite(LED2, HIGH);
+  lcd.print(count);
+  delay(250);
+  } else if (count > 2){
+    count = 0;
+  }
+
+
+}
